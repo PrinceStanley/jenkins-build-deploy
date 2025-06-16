@@ -1,0 +1,2 @@
+#Create a requirements.txt file for the application defined in app.py
+Flask
