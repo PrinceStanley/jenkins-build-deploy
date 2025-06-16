@@ -6,6 +6,15 @@ apiVersion: v1
 kind: Pod
 spec:
   containers:
+    - name: jnlp # Jenkins JNLP Agent
+      image: jenkins/inbound-agent:latest # Or a specific version like '4.13.2-1'
+      env:
+        # Replace with your Jenkins service URL that agents can reach
+        - name: JENKINS_URL
+          value: "http://jenkins.jenkins.svc.cluster.local:8080"
+      volumeMounts:
+        - name: workspace-volume
+          mountPath: /home/jenkins/agent/workspace
     - name: docker
       image: docker:24.0.7-dind
       securityContext:
@@ -26,6 +35,8 @@ spec:
   volumes:
     - name: docker-sock
       emptyDir: {}
+    - name: workspace-volume
+      emptyDir: {}
 """
         }
     }
@@ -39,7 +50,12 @@ spec:
     stages {
         stage('Checkout') {
             steps {
-                checkout scm
+                container('jnlp') {
+                    script {
+                        echo "Checking out code from SCM..."
+                        git branch: 'main', credentialsId: 'PrinceGithub', url: 'https://github.com/PrinceStanley/jenkins-build-deploy.git'
+                    }
+                }
             }
         }
 
