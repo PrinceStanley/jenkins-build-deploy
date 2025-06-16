@@ -124,8 +124,5 @@ spec:
                 echo "Build and deployment succeeded."
             }
         }
-        always {
-            cleanWs()
-        }
     }
 }
