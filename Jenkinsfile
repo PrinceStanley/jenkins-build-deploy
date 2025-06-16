@@ -32,10 +32,8 @@ spec:
 
     environment {
         AWS_REGION = 'us-east-1'
-        ECR_REPO = 'your-account-id.dkr.ecr.us-east-1.amazonaws.com/your-ecr-repo'
+        ECR_REPO = '828692096705.dkr.ecr.us-east-1.amazonaws.com/app-deploy/app'
         IMAGE_TAG = "${env.BUILD_NUMBER}"
-        KUBE_CONFIG = credentials('kubeconfig-credentials-id')
-        AWS_CREDENTIALS = credentials('aws-credentials-id')
     }
 
     stages {
@@ -83,8 +81,8 @@ spec:
         stage('Deploy to EKS') {
             steps {
                 container('kubectl') {
-                    withCredentials([file(credentialsId: 'kubeconfig-credentials-id', variable: 'KUBECONFIG')]) {
-                        sh """
+                    script {
+                         sh """
                             sed -i 's|image:.*|image: ${ECR_REPO}:${IMAGE_TAG}|' app-deploy.yaml
                             kubectl apply -f app-deploy.yaml
                             kubectl apply -f app-service.yaml

@@ -16,12 +16,10 @@ spec:
     spec:
       containers:
         - name: app
-          image: <aws_account_id>.dkr.ecr.<region>.amazonaws.com/app:latest
+          image: 828692096705.dkr.ecr.us-east-1.amazonaws.com/app-deploy/app:latest
           ports:
-            - containerPort: 80
+            - containerPort: 8080
           securityContext:
-            runAsUser: 1000
-            runAsGroup: 3000
             runAsNonRoot: true
             allowPrivilegeEscalation: false
             readOnlyRootFilesystem: true
@@ -36,5 +34,4 @@ spec:
               cpu: "500m"
               memory: "256Mi"
       securityContext:
-        fsGroup: 2000
         runAsNonRoot: true
