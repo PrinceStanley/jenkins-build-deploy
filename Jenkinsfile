@@ -53,7 +53,7 @@ spec:
                 container('jnlp') {
                     script {
                         echo "Checking out code from SCM..."
-                        checkout scm
+                        git branch: 'main', credentialsId: 'PrinceGithub', url: 'https://github.com/PrinceStanley/jenkins-build-deploy.git'
                         echo "Code checked out successfully."
                     }
                 }
