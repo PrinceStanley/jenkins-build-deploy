@@ -19,11 +19,17 @@ spec:
       image: docker:20.10-dind
       securityContext:
         privileged: true
+      command:
+        - dockerd-entrypoint.sh
+      args:
+        - --host=unix:///var/run/docker.sock
       volumeMounts:
         - name: docker-graph-storage
           mountPath: /var/lib/docker
         - name: workspace-volume
           mountPath: /home/jenkins/agent/workspace
+        - name: docker-sock
+          mountPath: /var/run
     - name: kubectl
       image: bitnami/kubectl:1.29
       command:
@@ -42,10 +48,14 @@ spec:
           mountPath: /var/lib/docker
         - name: workspace-volume
           mountPath: /home/jenkins/agent/workspace
+        - name: docker-sock
+          mountPath: /var/run
   volumes:
     - name: docker-graph-storage
       emptyDir: {}
     - name: workspace-volume
+      emptyDir: {}
+    - name: docker-sock
       emptyDir: {}
 """
         }
