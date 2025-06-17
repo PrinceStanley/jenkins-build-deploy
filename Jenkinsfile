@@ -38,6 +38,8 @@ spec:
         - cat
       tty: true
       volumeMounts:
+        - name: docker-graph-storage
+          mountPath: /var/lib/docker
         - name: workspace-volume
           mountPath: /home/jenkins/agent/workspace
   volumes:
@@ -71,7 +73,7 @@ spec:
 
         stage('Build Docker Image') {
             steps {
-                container('docker') {
+                container('aws') {
                     script {
                         def dockerImage = "${ECR_REPO}:${IMAGE_TAG}"
                         echo "Building Docker image: ${dockerImage}"
@@ -97,7 +99,7 @@ spec:
 
         stage('Push to ECR') {
             steps {
-                container('docker') {
+                container('aws') {
                     script {
  //                       docker.withRegistry("https://${ECR_REPO}", '') {
  //                           dockerImage.push()
