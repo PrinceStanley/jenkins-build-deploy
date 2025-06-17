@@ -20,8 +20,8 @@ spec:
       securityContext:
         privileged: true
       volumeMounts:
-        - name: docker-sock
-          mountPath: /var/run/docker.sock
+        - name: docker-graph-storage
+          mountPath: /var/lib/docker
     - name: kubectl
       image: bitnami/kubectl:1.29
       command:
@@ -33,7 +33,7 @@ spec:
         - cat
       tty: true
   volumes:
-    - name: docker-sock
+    - name: docker-graph-storage
       emptyDir: {}
     - name: workspace-volume
       emptyDir: {}
