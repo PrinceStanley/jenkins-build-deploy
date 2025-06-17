@@ -119,6 +119,7 @@ spec:
                     script {
                          sh """
                             sed -i 's|image:.*|image: ${ECR_REPO}:${IMAGE_TAG}|' app-deploy.yaml
+                            aws eks update-kubeconfig --name uc-devops-eks-cluster --region $AWS_REGION
                             kubectl create ns app
                             kubectl apply -f app-deploy.yaml -n app
                             kubectl apply -f app-svc.yaml -n app
