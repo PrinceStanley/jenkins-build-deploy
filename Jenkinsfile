@@ -128,7 +128,7 @@ spec:
                          sh """
                             sed -i 's|image:.*|image: ${ECR_REPO}:${IMAGE_TAG}|' app-deploy.yaml
                             kubectl apply -f app-deploy.yaml
-                            kubectl apply -f app-service.yaml
+                            kubectl apply -f app-svc.yaml
                             kubectl apply -f app-ingress.yaml
                             kubectl rollout status deployment/app-deploy --namespace=default
                             echo "Deployment to EKS completed successfully."

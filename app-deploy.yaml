@@ -20,7 +20,6 @@ spec:
           ports:
             - containerPort: 8080
           securityContext:
-            runAsNonRoot: true
             allowPrivilegeEscalation: false
             readOnlyRootFilesystem: true
             capabilities:
@@ -33,5 +32,3 @@ spec:
             limits:
               cpu: "500m"
               memory: "256Mi"
-      securityContext:
-        runAsNonRoot: true
