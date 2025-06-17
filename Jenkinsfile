@@ -22,8 +22,6 @@ spec:
       volumeMounts:
         - name: docker-graph-storage
           mountPath: /var/lib/docker
-        - name: docker-sock
-          mountPath: /var/run/docker.sock
         - name: workspace-volume
           mountPath: /home/jenkins/agent/workspace
     - name: kubectl
@@ -40,16 +38,12 @@ spec:
         - cat
       tty: true
       volumeMounts:
-        - name: docker-sock
-          mountPath: /var/run/docker.sock
         - name: workspace-volume
           mountPath: /home/jenkins/agent/workspace
   volumes:
     - name: docker-graph-storage
       emptyDir: {}
     - name: workspace-volume
-      emptyDir: {}
-    - name: docker-sock
       emptyDir: {}
 """
         }
