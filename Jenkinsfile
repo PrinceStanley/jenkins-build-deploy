@@ -16,7 +16,7 @@ spec:
         - name: workspace-volume
           mountPath: /home/jenkins/agent/workspace
     - name: docker
-      image: docker:24.0.7-dind
+      image: docker:20.10-dind
       securityContext:
         privileged: true
       volumeMounts:
@@ -50,10 +50,11 @@ spec:
     stages {
         stage('Checkout') {
             steps {
-                container('jnlp') {
+                container('docker') {
                     script {
                         echo "Checking out code from SCM..."
-                        git branch: 'main', credentialsId: 'PrinceGithub', url: 'https://github.com/PrinceStanley/jenkins-build-deploy.git'
+                       // git branch: 'main', credentialsId: 'PrinceGithub', url: 'https://github.com/PrinceStanley/jenkins-build-deploy.git'
+                        checkout scm
                         echo "Code checked out successfully."
                     }
                 }
