@@ -30,14 +30,6 @@ spec:
           mountPath: /home/jenkins/agent/workspace
         - name: docker-sock
           mountPath: /var/run
-    - name: kubectl
-      image: bitnami/kubectl:1.29
-      command:
-        - cat
-      tty: true
-      volumeMounts:
-        - name: workspace-volume
-          mountPath: /home/jenkins/agent/workspace
     - name: aws
       image: 828692096705.dkr.ecr.us-east-1.amazonaws.com/jenkins-agent-ecr-k8s:latest
       command:
@@ -127,10 +119,11 @@ spec:
                     script {
                          sh """
                             sed -i 's|image:.*|image: ${ECR_REPO}:${IMAGE_TAG}|' app-deploy.yaml
-                            kubectl apply -f app-deploy.yaml
-                            kubectl apply -f app-svc.yaml
-                            kubectl apply -f app-ingress.yaml
-                            kubectl rollout status deployment/app-deploy --namespace=default
+                            kubectl create ns app
+                            kubectl apply -f app-deploy.yaml -n app
+                            kubectl apply -f app-svc.yaml -n app
+                            kubectl apply -f app-ingress.yaml -n app
+                            kubectl rollout status deployment/app-deploy --namespace=app
                             echo "Deployment to EKS completed successfully."
                         """
                     }
