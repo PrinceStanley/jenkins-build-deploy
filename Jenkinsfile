@@ -22,6 +22,8 @@ spec:
       volumeMounts:
         - name: docker-graph-storage
           mountPath: /var/lib/docker
+        - name: workspace-volume
+          mountPath: /home/jenkins/agent/workspace
     - name: kubectl
       image: bitnami/kubectl:1.29
       command:
