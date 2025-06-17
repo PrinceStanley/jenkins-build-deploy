@@ -22,6 +22,8 @@ spec:
       volumeMounts:
         - name: docker-graph-storage
           mountPath: /var/lib/docker
+        - name: docker-sock
+          mountPath: /var/run/docker.sock
         - name: workspace-volume
           mountPath: /home/jenkins/agent/workspace
     - name: kubectl
@@ -29,18 +31,28 @@ spec:
       command:
         - cat
       tty: true
+      volumeMounts:
+        - name: workspace-volume
+          mountPath: /home/jenkins/agent/workspace
     - name: aws
       image: 828692096705.dkr.ecr.us-east-1.amazonaws.com/jenkins-agent-ecr-k8s:latest
       command:
         - cat
       tty: true
+      volumeMounts:
+        - name: docker-sock
+          mountPath: /var/run/docker.sock
+        - name: workspace-volume
+          mountPath: /home/jenkins/agent/workspace
   volumes:
     - name: docker-graph-storage
       emptyDir: {}
     - name: workspace-volume
       emptyDir: {}
+    - name: docker-sock
+      emptyDir: {}
 """
-        defaultContainer 'docker'
+        defaultContainer 'aws'
         }
     }
 
