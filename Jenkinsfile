@@ -31,7 +31,7 @@ spec:
         - name: docker-sock
           mountPath: /var/run
     - name: aws
-      image: 828692096705.dkr.ecr.us-east-1.amazonaws.com/jenkins-agent-ecr-k8s:v1
+      image: 828692096705.dkr.ecr.us-east-1.amazonaws.com/jenkins-agent-ecr-k8s:v2
       command:
         - cat
       tty: true
