@@ -38,6 +38,7 @@ spec:
     - name: workspace-volume
       emptyDir: {}
 """
+        defaultContainer 'docker'
         }
     }
 
@@ -50,7 +51,7 @@ spec:
     stages {
         stage('Checkout') {
             steps {
-                container('docker') {
+                container('jnlp') {
                     script {
                         echo "Checking out code from SCM..."
                        // git branch: 'main', credentialsId: 'PrinceGithub', url: 'https://github.com/PrinceStanley/jenkins-build-deploy.git'
