@@ -52,7 +52,6 @@ spec:
     - name: docker-sock
       emptyDir: {}
 """
-        defaultContainer 'aws'
         }
     }
 
