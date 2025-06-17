@@ -28,7 +28,7 @@ spec:
         - cat
       tty: true
     - name: aws
-      image: amazon/aws-cli:2.15.40
+      image: 828692096705.dkr.ecr.us-east-1.amazonaws.com/jenkins-agent-ecr-k8s:latest
       command:
         - cat
       tty: true
@@ -64,7 +64,11 @@ spec:
             steps {
                 container('docker') {
                     script {
-                        dockerImage = docker.build("${ECR_REPO}:${IMAGE_TAG}")
+                        def dockerImage = "${ECR_REPO}:${IMAGE_TAG}"
+                        echo "Building Docker image: ${dockerImage}"
+                        sh "docker build -t ${dockerImage} ."
+                        env.DOCKER_IMAGE = dockerImage
+                        echo "Docker image built successfully: ${dockerImage}"
                     }
                 }
             }
@@ -75,8 +79,7 @@ spec:
                 container('aws') {
                     script {
                         sh """
-                            aws ecr get-login-password --region $AWS_REGION | \
-                            docker login --username AWS --password-stdin $ECR_REPO
+                            aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin $ECR_REPO
                         """
                     }
                 }
@@ -87,9 +90,11 @@ spec:
             steps {
                 container('docker') {
                     script {
-                        docker.withRegistry("https://${ECR_REPO}", '') {
-                            dockerImage.push()
-                        }
+ //                       docker.withRegistry("https://${ECR_REPO}", '') {
+ //                           dockerImage.push()
+                        sh """
+                            docker push ${ECR_REPO}:${IMAGE_TAG}
+                        """
                     }
                 }
             }
@@ -104,7 +109,8 @@ spec:
                             kubectl apply -f app-deploy.yaml
                             kubectl apply -f app-service.yaml
                             kubectl apply -f app-ingress.yaml
-                            kubectl rollout status deployment/your-deployment --namespace=your-namespace
+                            kubectl rollout status deployment/app-deploy --namespace=default
+                            echo "Deployment to EKS completed successfully."
                         """
                     }
                 }
