@@ -123,7 +123,7 @@ spec:
 
         stage('Deploy to EKS') {
             steps {
-                container('kubectl') {
+                container('aws') {
                     script {
                          sh """
                             sed -i 's|image:.*|image: ${ECR_REPO}:${IMAGE_TAG}|' app-deploy.yaml
