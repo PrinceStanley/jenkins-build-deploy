@@ -119,7 +119,7 @@ spec:
                     script {
                          sh """
                             sed -i 's|image:.*|image: ${ECR_REPO}:${IMAGE_TAG}|' app-deploy.yaml
-                            kubectl create ns app
+                            kubectl create namespace app --dry-run=client -o yaml | kubectl apply -f -
                             kubectl apply -f app-deploy.yaml -n app
                             kubectl apply -f app-svc.yaml -n app
                             kubectl apply -f app-ingress.yaml -n app
