@@ -61,10 +61,10 @@ spec:
     }
 
     environment {
-        AWS_REGION = ${params.AWS_REGION}
-        ECR_REPO = ${params.ECR_REPO}
-        IMAGE_TAG = ${params.IMAGE_TAG}
-        CLUSTER_NAME = ${params.CLUSTER_NAME}
+        AWS_REGION = "${params.AWS_REGION}"
+        ECR_REPO = "${params.ECR_REPO}"
+        IMAGE_TAG = "${params.IMAGE_TAG}"
+        CLUSTER_NAME = "${params.CLUSTER_NAME}"
     }
 
     stages {
