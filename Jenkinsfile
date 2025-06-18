@@ -53,10 +53,18 @@ spec:
         }
     }
 
+    parameters {
+        string(name: 'AWS_REGION', defaultValue: 'us-east-1', description: 'AWS Region for ECR and EKS')
+        string(name: 'ECR_REPO', defaultValue: '828692096705.dkr.ecr.us-east-1.amazonaws.com/app-deploy/app', description: 'ECR Repository URL')
+        string(name: 'IMAGE_TAG', defaultValue: "latest", description: 'Docker Image Tag')
+        string(name: 'CLUSTER_NAME', defaultValue: 'uc-devops-eks-cluster', description: 'EKS Cluster Name')
+    }
+
     environment {
-        AWS_REGION = 'us-east-1'
-        ECR_REPO = '828692096705.dkr.ecr.us-east-1.amazonaws.com/app-deploy/app'
-        IMAGE_TAG = "${env.BUILD_NUMBER}"
+        AWS_REGION = ${params.AWS_REGION}
+        ECR_REPO = ${params.ECR_REPO}
+        IMAGE_TAG = ${params.IMAGE_TAG}
+        CLUSTER_NAME = ${params.CLUSTER_NAME}
     }
 
     stages {
@@ -119,6 +127,7 @@ spec:
                     script {
                          sh """
                             sed -i 's|image:.*|image: ${ECR_REPO}:${IMAGE_TAG}|' app-deploy.yaml
+                            aws eks update-kubeconfig --name ${CLUSTER_NAME} --region ${AWS_REGION}
                             kubectl create namespace app --dry-run=client -o yaml | kubectl apply -f -
                             kubectl apply -f app-deploy.yaml -n app
                             kubectl apply -f app-svc.yaml -n app
