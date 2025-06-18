@@ -42,6 +42,7 @@ spec:
           mountPath: /home/jenkins/agent/workspace
         - name: docker-sock
           mountPath: /var/run
+  serviceAccountName: default
   volumes:
     - name: docker-graph-storage
       emptyDir: {}
